@@ -3,11 +3,15 @@ from discord.ext import commands
 import time
 import secrets
  
-client = commands.Bot(command_prefix = '^')
+client = commands.Bot(command_prefix = ('^' or '@ServerManager'))
 
 @client.event
 async def on_ready():
     print('Bot is ready.')
+    
+@client.command()
+async def ping(ctx):
+    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
 
 @client.command()
 async def clear(ctx, amount=99999999999999):
@@ -25,9 +29,23 @@ async def token(ctx, user: discord.User, *, message=None):
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
+    await ctx.send(f'I have `kicked` {member}.')
 
 @client.command()
 async def ban(ctx, member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
+    await ctx.send(f'I have `banned` {member} with the reason `{reason}`.')
+
+@client.command()
+async def unban(ctx, *, member):
+    banned_users = ctx.guild.bans()
+    member_name, member_discriminator = member.split('#')
+
+    for ban_entry in banned_users:
+        user = ban_entry.user
+
+        if (user.name, user.discriminator) == (member_name, member_discriminator):
+            await ctx.guild.unban(user)
+            await ctx.send(f'Unbanned {user.name}#{user.discriminator}')
 
 client.run('Njk5NDIyODA0Mjk0MjM4MjQ4.Xrx8-A.WiCFhu2R-Me4XdZBaAn7vM-CPvQ')
