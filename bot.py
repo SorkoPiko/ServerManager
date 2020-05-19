@@ -29,12 +29,12 @@ async def token(ctx, user: discord.User, *, message=None):
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
-    await ctx.send(f'I have `kicked` {member}.')
+    await ctx.send(f'`Kicked` {member.mention}')
 
 @client.command()
 async def ban(ctx, member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
-    await ctx.send(f'I have `banned` {member} with the reason `{reason}`.')
+    await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
 
 @client.command()
 async def unban(ctx, *, member):
@@ -46,6 +46,7 @@ async def unban(ctx, *, member):
 
         if (user.name, user.discriminator) == (member_name, member_discriminator):
             await ctx.guild.unban(user)
-            await ctx.send(f'Unbanned {user.name}#{user.discriminator}')
+            await ctx.send(f'`Unbanned` {user.mention}')
+            return
 
 client.run('Njk5NDIyODA0Mjk0MjM4MjQ4.Xrx8-A.WiCFhu2R-Me4XdZBaAn7vM-CPvQ')
