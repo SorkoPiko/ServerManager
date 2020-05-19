@@ -18,7 +18,7 @@ async def clear(ctx, amount=99999999999999):
     new_clear = amount+1
     await ctx.channel.purge(limit=new_clear)
     time.sleep(0.2)
-    await ctx.send(f'I have cleared {amount} messages.')
+    await ctx.send(f'`Cleared` {amount} messages.')
 
 @client.command(pass_context=True)
 async def token(ctx, user: discord.User, *, message=None):
