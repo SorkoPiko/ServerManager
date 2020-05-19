@@ -38,7 +38,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 
 @client.command()
 async def unban(ctx, *, member):
-    banned_users = ctx.guild.bans()
+    banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
 
     for ban_entry in banned_users:
