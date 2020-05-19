@@ -24,7 +24,7 @@ async def clear(ctx, amount=99999999999999):
 async def token(ctx, user: discord.User, *, message=None):
     tokensend = secrets.token_urlsafe(40)
     message = (f'Here\'s your bot verification token: {tokensend}')
-    await client.send_message(user, message)
+    await ctx.send_message(user, message)
 
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
