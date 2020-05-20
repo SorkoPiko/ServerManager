@@ -6,10 +6,6 @@ import os
  
 client = commands.Bot(command_prefix = ('^' or '@ServerManager'))
 
-@client.event
-async def on_ready():
-    print('Bot is ready.')
-
 @client.command()
 async def clear(ctx, amount=99999999999999):
     new_clear = amount+1
