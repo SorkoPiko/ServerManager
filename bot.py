@@ -9,10 +9,6 @@ client = commands.Bot(command_prefix = ('^' or '@ServerManager'))
 @client.event
 async def on_ready():
     print('Bot is ready.')
-    
-@client.command()
-async def ping(ctx):
-    await ctx.send(f'Pong! {round(client.latency * 1000)}ms')
 
 @client.command()
 async def clear(ctx, amount=99999999999999):
@@ -65,13 +61,15 @@ async def spam(ctx, user_id=300475086547451914):
 @client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
+    ctx.send(f'`Loaded` {extension}')
 
 @client.command()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
+    ctx.send(f'`Unloaded` {extension}')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
-        client.load_extension(f'cogs.{filename[: - 3]}')
+        client.load_extension(f'cogs.{filename[:-3]}')
 
 client.run('Njk5NDIyODA0Mjk0MjM4MjQ4.Xrx8-A.WiCFhu2R-Me4XdZBaAn7vM-CPvQ')
