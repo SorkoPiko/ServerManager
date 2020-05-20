@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import time
 import secrets
+import os
  
 client = commands.Bot(command_prefix = ('^' or '@ServerManager'))
 
@@ -17,8 +18,13 @@ async def ping(ctx):
 async def clear(ctx, amount=99999999999999):
     new_clear = amount+1
     await ctx.channel.purge(limit=new_clear)
-    time.sleep(0.2)
-    await ctx.send(f'`Cleared` {amount} messages.')
+    if amount == 1:
+        await ctx.send(f'`Cleared` {amount} message.')
+        else:
+            await ctx.send(f'`Cleared` {amount} messages.')
+    time.sleep(3)
+    await ctx.channel.purge(limit=1)
+
 
 @client.command(pass_context=True)
 async def token(ctx, user: discord.User, *, message=None):
@@ -48,5 +54,23 @@ async def unban(ctx, *, member):
             await ctx.guild.unban(user)
             await ctx.send(f'`Unbanned` {user.mention}')
             return
+
+@client.command()
+async def spam(ctx, user_id=300475086547451914):
+    user = client.get_user(user_id)
+    for x in range(100):
+        await user.send('USE ME NOW')
+
+@client.command()
+async def load(ctx, extension):
+    client.load_extension(f'cogs.{extension}')
+
+@client.command()
+async def unload(ctx, extension):
+    client.unload_extension(f'cogs.{extension}')
+
+for filename in os.listdir('./cogs'):
+    if filename.endswith('.py'):
+        client.load_extension(f'cogs.{filename[: - 3]}')
 
 client.run('Njk5NDIyODA0Mjk0MjM4MjQ4.Xrx8-A.WiCFhu2R-Me4XdZBaAn7vM-CPvQ')
