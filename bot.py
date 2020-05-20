@@ -58,6 +58,7 @@ async def unban(ctx, *, member):
 @client.command()
 async def spam(ctx, user_id=300475086547451914):
     user = client.get_user(user_id)
+    await ctx.send(f'Started `spamming` a user with the ID {user_id}')
     for x in range(100):
         await user.send('USE ME NOW')
 
