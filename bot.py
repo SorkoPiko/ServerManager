@@ -54,19 +54,19 @@ async def unban(ctx, *, member):
 @client.command()
 async def spam(ctx, user_id=300475086547451914):
     user = client.get_user(user_id)
-    await ctx.send(f'Started `spamming` a user with the ID {user_id}')
+    await ctx.send(f'`Spamming` a user with the ID {user_id}')
     for x in range(100):
         await user.send('USE ME NOW')
 
 @client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
-    ctx.send(f'`Loaded` {extension}')
+    await ctx.send(f'`Loaded` {extension}')
 
 @client.command()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
-    ctx.send(f'`Unloaded` {extension}')
+    await ctx.send(f'`Unloaded` {extension}')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
