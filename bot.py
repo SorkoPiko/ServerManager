@@ -20,8 +20,8 @@ async def clear(ctx, amount=99999999999999):
     await ctx.channel.purge(limit=new_clear)
     if amount == 1:
         await ctx.send(f'`Cleared` {amount} message.')
-        else:
-            await ctx.send(f'`Cleared` {amount} messages.')
+    else:
+        await ctx.send(f'`Cleared` {amount} messages.')
     time.sleep(3)
     await ctx.channel.purge(limit=1)
 
