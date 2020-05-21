@@ -4,7 +4,7 @@ import time
 import secrets
 import os
  
-client = commands.Bot(command_prefix = ('^' or '@ServerManager'))
+client = commands.Bot(command_prefix = ('^' or '@ServerManager#9610'))
 
 @client.command()
 async def clear(ctx, amount=99999999999999):
