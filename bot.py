@@ -6,6 +6,11 @@ import os
  
 client = commands.Bot(command_prefix = ('^' or '@ServerManager#9610'))
 
+@client.event
+async def on_ready():
+    mygame = ('^help | https://discord.gg/T8P4PCS')
+    await client.change_presence(status=discord.Status.online, activity=discord.Game(mygame))
+
 @client.command()
 async def clear(ctx, amount=99999999999999):
     new_clear = amount+1

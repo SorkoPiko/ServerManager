@@ -1,4 +1,4 @@
-import discord
+import dsiscord
 from discord.ext import commands
 
 class Setup(commands.Cog):
@@ -9,8 +9,6 @@ class Setup(commands.Cog):
     #Events
     @commands.Cog.listener()
     async def on_ready(self):
-        mygame = ('on ' + str(client.servers + ' | ^help'))
-        await client.change_presence(status=discord.Status.idle, activity=discord.Game())
         print('Bot is online.')
 
     #Commands
