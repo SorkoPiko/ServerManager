@@ -12,7 +12,7 @@ class Status(commands.Cog):
     #Commands
     @commands.command()
     async def setstatus(self, ctx, *, status):
-        tip = random.choice(1, 5)
+        tip = random.randrange(1, 5)
         if tip == 4:
             goodtip = '\n\n**TIP:** Did you know that you can change my status by DM?'
         else:
