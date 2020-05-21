@@ -1,4 +1,4 @@
-import dsiscord
+import discord
 from discord.ext import commands
 
 class Setup(commands.Cog):
