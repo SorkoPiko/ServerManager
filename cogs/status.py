@@ -17,7 +17,6 @@ class Status(commands.Cog):
             goodtip = '\n\n**TIP:** Did you know that you can change my status by DM?'
         else:
             goodtip = None
-        global tip
         global sstatus
         mygame = discord.Game('^help | https://discord.gg/T8P4PCS')
         if status == ('dnd' or 'do not disturb'):
@@ -33,7 +32,9 @@ class Status(commands.Cog):
             mystatus = discord.Status.online
             sstatus = 'Online'
         await self.client.change_presence(status=mystatus, activity=mygame)
-        await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
-
+        if goodtip == None:
+            await ctx.send(f'`Status` changed to `{sstatus}`')
+        else:
+            await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
 def setup(client):
     client.add_cog(Status(client))
