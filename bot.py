@@ -11,18 +11,19 @@ async def clear(ctx, amount=99999999999999):
     new_clear = amount+1
     await ctx.channel.purge(limit=new_clear)
     if amount == 1:
-        await ctx.send(f'`Cleared` {amount} message.')
+        await ctx.send(f'`Cleared` {amount} message')
     else:
-        await ctx.send(f'`Cleared` {amount} messages.')
+        await ctx.send(f'`Cleared` {amount} messages')
     time.sleep(3)
     await ctx.channel.purge(limit=1)
 
 
-@client.command(pass_context=True)
-async def token(ctx, user: discord.User, *, message=None):
+@client.command()
+async def token(ctx, member: discord.Member):
+    user = member.id
     tokensend = secrets.token_urlsafe(40)
     message = (f'Here\'s your bot verification token: {tokensend}')
-    await ctx.send_message(user, message)
+    await user.send(tokensend)
 
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
@@ -48,9 +49,9 @@ async def unban(ctx, *, member):
             return
 
 @client.command()
-async def spam(ctx, user_id=300475086547451914):
-    user = client.get_user(user_id)
-    await ctx.send(f'`Spamming` a user with the ID {user_id}')
+async def spam(ctx, member : discord.Member):
+    user = member.id
+    await ctx.send(f'`Spamming` {member}')
     for x in range(100):
         await user.send('USE ME NOW')
 

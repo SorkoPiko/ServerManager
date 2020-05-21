@@ -14,7 +14,7 @@ class Setup(commands.Cog):
     #Commands
     @commands.command()
     async def ping(ctx):
-        await ctx.send(f':ping_pong: Pong! {round(client.latency * 1000)}ms :ping_pong:')
+        await ctx.send(f':ping_pong: Pong! {round(commands.latency * 1000)}ms :ping_pong:')
     
 def setup(client):
     client.add_cog(Setup(client))
