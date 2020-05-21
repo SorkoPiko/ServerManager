@@ -51,7 +51,7 @@ async def unban(ctx, *, member):
 @client.command()
 async def spam(ctx, member : discord.Member):
     user = member.id
-    await ctx.send(f'`Spamming` {member}')
+    await ctx.send(f'`Spamming` {member.mention}')
     for x in range(100):
         await user.send('USE ME NOW')
 
