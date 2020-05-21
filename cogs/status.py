@@ -18,7 +18,7 @@ class Status(commands.Cog):
         else:
             goodtip = None
         global sstatus
-        global mysta
+        global mystatus
         mygame = discord.Game('^help | https://discord.gg/T8P4PCS')
         if status == ('dnd' or 'do not disturb'):
             mystatus = discord.Status.dnd
@@ -29,7 +29,7 @@ class Status(commands.Cog):
         if status == ('offline' or 'invisible'):
             mystatus = discord.Status.offline
             sstatus = 'offline'
-        if status == 'Offline':
+        if status == 'online':
             mystatus = discord.Status.online
             sstatus = 'Online'
         await self.client.change_presence(status=mystatus, activity=mygame)
