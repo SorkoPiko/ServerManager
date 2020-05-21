@@ -18,6 +18,7 @@ class Status(commands.Cog):
         else:
             goodtip = None
         global sstatus
+        global mysta
         mygame = discord.Game('^help | https://discord.gg/T8P4PCS')
         if status == ('dnd' or 'do not disturb'):
             mystatus = discord.Status.dnd
