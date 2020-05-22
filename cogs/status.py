@@ -2,6 +2,10 @@ import discord
 from discord.ext import commands
 import random
 
+global tuidle
+global mygame
+mygame = discord.Game('^help | https://discord.gg/T8P4PCS')
+
 class Status(commands.Cog):
 
     def __init__(self, client):
@@ -19,7 +23,6 @@ class Status(commands.Cog):
             goodtip = None
         global sstatus
         global mystatus
-        mygame = discord.Game('^help | https://discord.gg/T8P4PCS')
         if status == ('dnd' or 'do not disturb'):
             mystatus = discord.Status.dnd
             sstatus = 'Do Not Disturb'
@@ -37,5 +40,10 @@ class Status(commands.Cog):
             await ctx.send(f'`Status` changed to `{sstatus}`')
         else:
             await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
+        tuidle = 300
+
 def setup(client):
     client.add_cog(Status(client))
+
+for tuidle in range(tuidle):
+    tuidle -= 1

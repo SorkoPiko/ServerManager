@@ -6,9 +6,12 @@ import os
  
 client = commands.Bot(command_prefix = ('^' or '@ServerManager#9610'))
 
+global tuidle
+global mygame
+mygame = discord.Game('^help | https://discord.gg/T8P4PCS | ^invite')
+
 @client.event
 async def on_ready():
-    mygame = discord.Game('^help | https://discord.gg/T8P4PCS')
     await client.change_presence(status=discord.Status.online, activity=mygame)
 
 @client.command()
@@ -21,6 +24,7 @@ async def clear(ctx, amount=99999999999999):
         await ctx.send(f'`Cleared` {amount} messages')
     time.sleep(3)
     await ctx.channel.purge(limit=1)
+    tuidle = 300
 
 
 @client.command()
@@ -29,16 +33,19 @@ async def token(ctx, member: discord.Member):
     tokensend = secrets.token_urlsafe(40)
     message = (f'Here\'s your bot verification token: {tokensend}')
     await user.send(tokensend)
+    tuidle = 300
 
 @client.command()
 async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
     await ctx.send(f'`Kicked` {member.mention}')
+    tuidle = 300
 
 @client.command()
 async def ban(ctx, member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
     await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
+    tuidle = 300
 
 @client.command()
 async def unban(ctx, *, member):
@@ -52,16 +59,27 @@ async def unban(ctx, *, member):
             await ctx.guild.unban(user)
             await ctx.send(f'`Unbanned` {user.mention}')
             return
+    tuidle = 300
 
 @client.command()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'`Loaded` {extension}')
+    tuidle = 300
 
 @client.command()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'`Unloaded` {extension}')
+    tuidle = 300
+
+@client.command
+async def guide(ctx):
+    await ctx.send("Here's a link for my guide:\nhttps://docs.google.com/document/d/1IMvLL7D0hfpRCXJRZCFZGGGWDZY5Eu1SeSOEXeishCw/edit?usp=sharing")
+
+@client.command
+async def invite(ctx):
+    await ctx.send('Click here to invite me! https://discord.com/api/oauth2/authorize?client_id=699422804294238248&permissions=8&scope=bot')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
