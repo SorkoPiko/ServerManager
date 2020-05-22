@@ -44,6 +44,3 @@ class Status(commands.Cog):
 
 def setup(client):
     client.add_cog(Status(client))
-
-for tuidle in range(tuidle):
-    tuidle -= 1
