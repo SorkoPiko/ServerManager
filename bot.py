@@ -8,7 +8,7 @@ client = commands.Bot(command_prefix = ('^' or '@ServerManager#9610'))
 
 global tuidle
 global mygame
-mygame = discord.Game('^help | https://discord.gg/T8P4PCS | ^invite')
+mygame = discord.Game('^help | discord.gg/T8P4PCS | ^invite')
 
 @client.event
 async def on_ready():
@@ -32,7 +32,7 @@ async def token(ctx, member: discord.Member):
     user = member.id
     tokensend = secrets.token_urlsafe(40)
     message = (f'Here\'s your bot verification token: {tokensend}')
-    await user.send(tokensend)
+    await user.send(message)
     tuidle = 300
 
 @client.command()
@@ -73,11 +73,11 @@ async def unload(ctx, extension):
     await ctx.send(f'`Unloaded` {extension}')
     tuidle = 300
 
-@client.command
+@client.command()
 async def guide(ctx):
     await ctx.send("Here's a link for my guide:\nhttps://docs.google.com/document/d/1IMvLL7D0hfpRCXJRZCFZGGGWDZY5Eu1SeSOEXeishCw/edit?usp=sharing")
 
-@client.command
+@client.command()
 async def invite(ctx):
     await ctx.send('Click here to invite me! https://discord.com/api/oauth2/authorize?client_id=699422804294238248&permissions=8&scope=bot')
 

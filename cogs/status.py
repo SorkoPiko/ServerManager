@@ -31,7 +31,7 @@ class Status(commands.Cog):
             sstatus = 'Idle'
         if status == ('offline' or 'invisible'):
             mystatus = discord.Status.offline
-            sstatus = 'offline'
+            sstatus = 'Offline'
         if status == 'online':
             mystatus = discord.Status.online
             sstatus = 'Online'
