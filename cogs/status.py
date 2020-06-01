@@ -4,7 +4,7 @@ import random
 
 global tuidle
 global mygame
-mygame = discord.Game('^help | https://discord.gg/T8P4PCS | ^invite')
+mygame = discord.Game('^help | discord.gg/T8P4PCS | ^invite')
 
 class Status(commands.Cog):
 
