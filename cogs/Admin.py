@@ -12,7 +12,7 @@ class Admin(commands.Cog):
     #Events
 
     @commands.Cog.listener()
-    async def on_ready():
+    async def on_ready(self):
         await client.change_presence(status=discord.Status.online, activity=mygame)
 
     #Commands
