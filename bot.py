@@ -5,7 +5,6 @@ import secrets
 import os
  
 client = commands.Bot(command_prefix = ('^' or '@ServerManager#9610'))
-
 global tuidle
 global mygame
 mygame = discord.Game('^help | discord.gg/T8P4PCS | ^invite')
@@ -15,6 +14,7 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=mygame)
 
 @client.command()
+@commands.has_permissions(manage_messages=True)
 async def clear(ctx, amount=99999999999999):
     new_clear = amount+1
     await ctx.channel.purge(limit=new_clear)
@@ -36,18 +36,21 @@ async def token(ctx, member: discord.Member):
     tuidle = 300
 
 @client.command()
+@commands.has_permissions(kick_members=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
     await member.kick(reason=reason)
     await ctx.send(f'`Kicked` {member.mention}')
     tuidle = 300
 
 @client.command()
+@commands.has_permissions(ban_members=True)
 async def ban(ctx, member : discord.Member, *, reason=None):
     await member.ban(reason=reason)
     await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
     tuidle = 300
 
 @client.command()
+@commands.has_permissions(ban_members=True)
 async def unban(ctx, *, member):
     banned_users = await ctx.guild.bans()
     member_name, member_discriminator = member.split('#')
@@ -61,13 +64,15 @@ async def unban(ctx, *, member):
             return
     tuidle = 300
 
-@client.command()
+@client.command(hidden=True)
+@commands.is_owner()
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
     await ctx.send(f'`Loaded` {extension}')
     tuidle = 300
 
-@client.command()
+@client.command(hidden=True)
+@commands.is_owner()
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.send(f'`Unloaded` {extension}')

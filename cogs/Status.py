@@ -10,11 +10,12 @@ class Status(commands.Cog):
 
     def __init__(self, client):
         self.client = client
-    
+
     #Events
 
     #Commands
-    @commands.command()
+    @commands.command(hidden=True, aliases=['status'])
+    @commands.is_owner()
     async def setstatus(self, ctx, *, status):
         tip = random.randrange(1, 5)
         if tip == 4:
