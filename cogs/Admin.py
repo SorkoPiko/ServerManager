@@ -21,8 +21,8 @@ class Admin(commands.Cog):
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     async def clear(self, ctx, amount=99999999999999):
-	perms = author.guild_permissions()
-	print(perms)
+        perms = ctx.author.guild_permissions
+        print(perms)
         new_clear = amount+1
         await ctx.channel.purge(limit=new_clear)
         if amount == 1:
