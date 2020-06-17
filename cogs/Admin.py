@@ -69,9 +69,11 @@ class Admin(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
-        await ctx.send('Logging off...')
+        onemessage = ctx.message
+        mymessage = await ctx.send('Logging off...')
         time.sleep(1)
-        await ctx.channel.purge(limit=2)
+        mymessage.delete()
+        onemessage.delete()
         await self.client.logout()
 
 def setup(client):
