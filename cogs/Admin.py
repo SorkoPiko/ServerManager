@@ -25,8 +25,12 @@ class Admin(commands.Cog):
         messages = await ctx.channel.purge(limit=amount+1)
         mess_len = len(messages)-1
         if amount == 1:
+            await ctx.channel.trigger_typing()
+            time.sleep(0.3)
             await ctx.send('`Cleared` 1  message')
         else:
+            await ctx.channel.trigger_typing()
+            time.sleep(0.3)
             message_end = await ctx.send(f'`Cleared` {mess_len} messages')
         await message_end.delete(delay=wait)
         print(f'{ctx.author} cleared {mess_len} messages in channel #{ctx.channel} in guild {ctx.guild}.')
@@ -35,6 +39,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member, *, reason=None):
         await member.kick(reason=reason)
+        await ctx.channel.trigger_typing()
+        time.sleep(0.3)
         await ctx.send(f'`Kicked` {member.mention}')
         print(f'{ctx.author} kicked {member} in guild {ctx.guild}.')
         if ctx.command_failed == True:
@@ -44,6 +50,8 @@ class Admin(commands.Cog):
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member : discord.Member, *, reason=None):
         await member.ban(reason=reason)
+        await ctx.channel.trigger_typing()
+        time.sleep(0.3)
         await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
         print(f'{ctx.author} banned {member} in guild {ctx.guild}.')
         if ctx.command_failed == True:
@@ -60,6 +68,8 @@ class Admin(commands.Cog):
 
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
+                await ctx.channel.trigger_typing()
+                time.sleep(0.3)
                 await ctx.send(f'`Unbanned` {user.mention}')
                 print(f'{ctx.author} unbanned {member} in guild {ctx.guild}.')
                 return
@@ -69,9 +79,16 @@ class Admin(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
-        await ctx.send('Logging off...')
+        mes = ctx.message
+        #async with ctx.channel.typing():
+            #time.sleep(0.1)
+            #mymes = await ctx.send('Logging off...')
+        await ctx.channel.trigger_typing()
+        time.sleep(0.3)
+        mymes = await ctx.send('Logging off...')
         time.sleep(1)
-        await ctx.channel.purge(limit=2)
+        await mes.delete()
+        await mymes.delete()
         await self.client.logout()
 
 def setup(client):
