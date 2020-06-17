@@ -9,6 +9,10 @@ class Admin(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        
+    def auditLog(self, log):
+        with open("cogs/AuditLog.txt", 'a') as file:
+            file.write('\n' + log)
 
     #Events
 
@@ -20,42 +24,44 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
-    async def clear(self, ctx, amount=99999999999999):
-        wait = +3.00
+    async def clear(self, ctx, amount: int=999999999999999, user: discord.Member=None):
         messages = await ctx.channel.purge(limit=amount+1)
         mess_len = len(messages)-1
-        if amount == 1:
+        def msgcheck(amsg):
+            if user:
+               return amsg.user.id == user.id
+            return True
+        messages = await ctx.channel.purge(limit=amount+1, check=msgcheck)
+        if mess_len == 1:
             await ctx.channel.trigger_typing()
-            time.sleep(0.3)
-            await ctx.send('`Cleared` 1  message')
+            time.sleep(0.05)
+            mymes = await ctx.send('`Cleared` 1  message', delete_after=3)
         else:
             await ctx.channel.trigger_typing()
-            time.sleep(0.3)
-            message_end = await ctx.send(f'`Cleared` {mess_len} messages')
-        await message_end.delete(delay=wait)
-        print(f'{ctx.author} cleared {mess_len} messages in channel #{ctx.channel} in guild {ctx.guild}.')
+            time.sleep(0.05)
+            mymes = await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
+        audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild}.'
+        self.auditLog(audit)
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member, *, reason=None):
         await member.kick(reason=reason)
         await ctx.channel.trigger_typing()
-        time.sleep(0.3)
+        time.sleep(0.05)
         await ctx.send(f'`Kicked` {member.mention}')
-        print(f'{ctx.author} kicked {member} in guild {ctx.guild}.')
-        if ctx.command_failed == True:
-            await ctx.send('`Command Failed. Sorry.`')
+        audit = f'{ctx.author} ({ctx.author.id}) kicked {member} in channel #{ctx.channel} in guild {ctx.guild}.'
+        sel.auditLog(audit)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
     async def ban(self, ctx, member : discord.Member, *, reason=None):
         await member.ban(reason=reason)
         await ctx.channel.trigger_typing()
-        time.sleep(0.3)
+        time.sleep(0.05)
         await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
-        print(f'{ctx.author} banned {member} in guild {ctx.guild}.')
-        if ctx.command_failed == True:
-            await ctx.send('`Command Failed. Sorry.`')
+        audit = f'{ctx.author} ({ctx.author.id}) banned {member} in channel #{ctx.channel} in guild {ctx.guild}.'
+        self.auditLog(audit)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -69,12 +75,11 @@ class Admin(commands.Cog):
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
                 await ctx.channel.trigger_typing()
-                time.sleep(0.3)
+                time.sleep(0.05)
                 await ctx.send(f'`Unbanned` {user.mention}')
-                print(f'{ctx.author} unbanned {member} in guild {ctx.guild}.')
+                audit = f'{ctx.author} ({ctx.author.id}) unbanned {member} in channel #{ctx.channel} in guild {ctx.guild}.'
+                self.auditLog(audit)
                 return
-            if ctx.command_failed == True:
-                await ctx.send('`Command Failed. Sorry.`')
 
     @commands.command(hidden=True)
     @commands.is_owner()
@@ -84,11 +89,12 @@ class Admin(commands.Cog):
             #time.sleep(0.1)
             #mymes = await ctx.send('Logging off...')
         await ctx.channel.trigger_typing()
-        time.sleep(0.3)
-        mymes = await ctx.send('Logging off...')
+        time.sleep(0.05)
+        mymes = await ctx.send('Logging off...', delete_after=1)
         time.sleep(1)
         await mes.delete()
-        await mymes.delete()
+        audit = f"{ctx.author} ({ctx.author.id}) initiated shutdown in channel #{ctx.channel} in guild {ctx.guild}."
+        self.auditLog(audit)
         await self.client.logout()
 
 def setup(client):
