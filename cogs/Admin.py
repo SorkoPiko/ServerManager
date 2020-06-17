@@ -28,8 +28,7 @@ class Admin(commands.Cog):
             await ctx.send('`Cleared` 1  message')
         else:
             message_end = await ctx.send(f'`Cleared` {mess_len} messages')
-        message_end.delete(delay=wait)
-        await ctx.channel.purge(limit=1)
+        await message_end.delete(delay=wait)
         print(f'{ctx.author} cleared {mess_len} messages in channel #{ctx.channel} in guild {ctx.guild}.')
 
     @commands.command()
