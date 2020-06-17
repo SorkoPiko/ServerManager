@@ -23,7 +23,7 @@ class Admin(commands.Cog):
     async def clear(self, ctx, amount=99999999999999):
         wait = +3.00
         messages = await ctx.channel.purge(limit=amount+1)
-        mess_len = len(messages)
+        mess_len = len(messages)-1
         if amount == 1:
             await ctx.send('`Cleared` 1  message')
         else:
