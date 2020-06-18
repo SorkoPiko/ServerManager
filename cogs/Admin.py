@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 import time
+from settings import myenv
 
 global mygame
 mygame = discord.Game('^help | discord.gg/T8P4PCS | ^invite')
@@ -47,7 +48,7 @@ class Admin(commands.Cog):
     @clear.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("`ERROR 403: Forbidden.` You need to have `Manage Messages` permissions to use this.", delete_after=10)
+            await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Manage Messages` permissions to use this.", delete_after=10)
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -62,7 +63,7 @@ class Admin(commands.Cog):
     @kick.error
     async def kick_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("`ERROR 403: Forbidden.` You need to have `Kick Members` permissions to use this.", delete_after=10)
+            await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Kick Members` permissions to use this.", delete_after=10)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -77,7 +78,7 @@ class Admin(commands.Cog):
     @ban.error
     async def ban_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("`ERROR 403: Forbidden.` You need to have `Ban Members` permissions to use this.", delete_after=10)
+            await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Ban Members` permissions to use this.", delete_after=10)
 
 
     @commands.command()
@@ -101,7 +102,7 @@ class Admin(commands.Cog):
     @unban.error
     async def unban_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("`ERROR 403: Forbidden.` You need to have `Ban Members` permissions to use this.", delete_after=10)
+            await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Ban Members` permissions to use this.", delete_after=10)
 
 
     @commands.command(hidden=True)
@@ -122,7 +123,7 @@ class Admin(commands.Cog):
     @shutdown.error
     async def shutdown_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
-            await ctx.send("`ERROR 403: Forbidden.` You need to be <@!609544328737456149> to use this.", delete_after=10)
+            await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.owner_id}> to use this.", delete_after=10)
             
 
 def setup(client):
