@@ -35,13 +35,19 @@ class Admin(commands.Cog):
         if mess_len == 1:
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send('`Cleared` 1  message', delete_after=3)
+            await ctx.send('`Cleared` 1  message', delete_after=3)
         else:
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
-        audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild}.'
+            await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
+        audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
+    
+    
+    @clear.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("`ERROR 403: Forbidden.` You need to have `Manage Messages` permissions to use this.", delete_after=10)
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
@@ -50,8 +56,13 @@ class Admin(commands.Cog):
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
         await ctx.send(f'`Kicked` {member.mention}')
-        audit = f'{ctx.author} ({ctx.author.id}) kicked {member} in channel #{ctx.channel} in guild {ctx.guild}.'
-        sel.auditLog(audit)
+        audit = f'{ctx.author} ({ctx.author.id}) kicked {member} in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
+        self.auditLog(audit)
+        
+    @kick.error
+    async def kick_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("`ERROR 403: Forbidden.` You need to have `Kick Members` permissions to use this.", delete_after=10)
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -60,8 +71,14 @@ class Admin(commands.Cog):
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
         await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
-        audit = f'{ctx.author} ({ctx.author.id}) banned {member} in channel #{ctx.channel} in guild {ctx.guild}.'
+        audit = f'{ctx.author} ({ctx.author.id}) banned {member} in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
+
+    @ban.error
+    async def ban_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("`ERROR 403: Forbidden.` You need to have `Ban Members` permissions to use this.", delete_after=10)
+
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
@@ -77,9 +94,15 @@ class Admin(commands.Cog):
                 await ctx.channel.trigger_typing()
                 time.sleep(0.05)
                 await ctx.send(f'`Unbanned` {user.mention}')
-                audit = f'{ctx.author} ({ctx.author.id}) unbanned {member} in channel #{ctx.channel} in guild {ctx.guild}.'
+                audit = f'{ctx.author} ({ctx.author.id}) unbanned {member} in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
                 self.auditLog(audit)
                 return
+
+    @unban.error
+    async def unban_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("`ERROR 403: Forbidden.` You need to have `Ban Members` permissions to use this.", delete_after=10)
+
 
     @commands.command(hidden=True)
     @commands.is_owner()
@@ -90,12 +113,17 @@ class Admin(commands.Cog):
             #mymes = await ctx.send('Logging off...')
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
-        mymes = await ctx.send('Logging off...', delete_after=1)
-        time.sleep(1)
+        await ctx.send('Logging off...', delete_after=1)
         await mes.delete()
-        audit = f"{ctx.author} ({ctx.author.id}) initiated shutdown in channel #{ctx.channel} in guild {ctx.guild}."
+        audit = f"{ctx.author} ({ctx.author.id}) initiated shutdown in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
         self.auditLog(audit)
         await self.client.logout()
+
+    @shutdown.error
+    async def shutdown_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            await ctx.send("`ERROR 403: Forbidden.` You need to be <@!609544328737456149> to use this.", delete_after=10)
+            
 
 def setup(client):
     client.add_cog(Admin(client))
