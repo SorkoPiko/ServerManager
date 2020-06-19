@@ -6,7 +6,8 @@ import time
 
 global tuidle
 global mygame
-mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}invite')
+mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}')
+
 
 class Status(commands.Cog):
 
@@ -14,7 +15,6 @@ class Status(commands.Cog):
         self.client = client
 
     #Events
-
     #Commands
     @commands.command(hidden=True, aliases=['status'])
     @commands.is_owner()
@@ -50,6 +50,17 @@ class Status(commands.Cog):
         time.sleep(5)
         await mymes.delete()
         tuidle = 300
+        
+    @setstatus.error
+    async def setstatus_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            mes = ctx.message
+            await mes.delete()
+            await ctx.channel.trigger_typing()
+            time.sleep(0.05)
+            mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
+            time.sleep(10)
+            await mymes.delete()
 
 def setup(client):
     client.add_cog(Status(client))

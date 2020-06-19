@@ -10,3 +10,4 @@ class myenv(object):
     SUPPORT_SERVER = os.getenv("SUPPORT_SERVER")
     PREFIX = os.getenv("PREFIX")
     OWNER_ID = os.getenv("OWNER_ID")
+    EXTRA_COMMAND = os.getenv("EXTRA_COMMAND")

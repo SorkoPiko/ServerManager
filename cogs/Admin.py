@@ -4,7 +4,7 @@ import time
 from settings import myenv
 
 global mygame
-mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}invite')
+mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}')
 
 class Admin(commands.Cog):
 
