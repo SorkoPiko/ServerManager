@@ -38,8 +38,12 @@ class Status(commands.Cog):
             sstatus = 'Online'
         await self.client.change_presence(status=mystatus, activity=mygame)
         if goodtip == None:
+            await ctx.channel.trigger_typing()
+            time.sleep(0.3)
             await ctx.send(f'`Status` changed to `{sstatus}`')
         else:
+            await ctx.channel.trigger_typing()
+            time.sleep(0.3)
             await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
         tuidle = 300
 
