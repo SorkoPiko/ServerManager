@@ -43,7 +43,7 @@ async def load_error(ctx, error):
         await mes.delete()
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
-        mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.owner_id}> to use this.")
+        mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.owner_id}> to use this.")
         time.sleep(10)
         await mymes.delete()
 
@@ -64,7 +64,7 @@ async def unload_error(ctx, error):
         await mes.delete()
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
-        mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.owner_id}> to use this.")
+        mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.owner_id}> to use this.")
         time.sleep(10)
         await mymes.delete()
 

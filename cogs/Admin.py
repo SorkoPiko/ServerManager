@@ -25,6 +25,7 @@ class Admin(commands.Cog):
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
+    @commands.bot_has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int=999999999999999, user: discord.Member=None):
         messages = await ctx.channel.purge(limit=amount+1)
         mess_len = len(messages)-1
@@ -52,12 +53,13 @@ class Admin(commands.Cog):
             await mes.delete()
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Manage Messages` permissions to use this.")
+            mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Manage Messages` permissions to use this.")
             time.sleep(10)
             await mymes.delete()
 
     @commands.command()
     @commands.has_permissions(kick_members=True)
+    @commands.bot_has_permissions(kick_members=True)
     async def kick(self, ctx, member : discord.Member, *, reason=None):
         await member.kick(reason=reason)
         await ctx.channel.trigger_typing()
@@ -73,12 +75,13 @@ class Admin(commands.Cog):
             await mes.delete()
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Kick Members` permissions to use this.")
+            mymes = await ctx.send("`ERROR 403: Forbidden`\n`I/`You` need to have `Kick Members` permissions to use this.")
             time.sleep(10)
             await mymes.delete()
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
+    @commands.bot_has_permissions(ban_members=True)
     async def ban(self, ctx, member : discord.Member, *, reason=None):
         await member.ban(reason=reason)
         await ctx.channel.trigger_typing()
@@ -94,13 +97,14 @@ class Admin(commands.Cog):
             await mes.delete()
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Ban Members` permissions to use this.")
+            mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Ban Members` permissions to use this.")
             time.sleep(10)
             await mymes.delete()
 
 
     @commands.command()
     @commands.has_permissions(ban_members=True)
+    @commands.bot_has_permissions(ban_members=True)
     async def unban(self, ctx, *, member):
         banned_users = await ctx.guild.bans()
         member_name, member_discriminator = member.split('#')
@@ -124,7 +128,7 @@ class Admin(commands.Cog):
             await mes.delete()
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send("`ERROR 403: Forbidden`\nYou need to have `Ban Members` permissions to use this.")
+            mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Ban Members` permissions to use this.")
             time.sleep(10)
             await mymes.delete()
 
@@ -151,7 +155,7 @@ class Admin(commands.Cog):
             await mes.delete()
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.owner_id}> to use this.")
+            mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.owner_id}> to use this.")
             time.sleep(10)
             await mymes.delete()
             
