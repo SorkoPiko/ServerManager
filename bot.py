@@ -13,7 +13,7 @@ from settings import myenv
 client = commands.Bot(command_prefix = ['^', '@ServerManager#9610 '])
 global tuidle
 global mygame
-mygame = discord.Game('{myenv.prefix}help | {myenv.server} | {myenv.prefix}invite')
+mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}invite')
 
 @client.event
 async def on_ready():
@@ -43,7 +43,7 @@ async def load_error(ctx, error):
         await mes.delete()
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
-        mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.owner_id}> to use this.")
+        mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.OWNER_ID}> to use this.")
         time.sleep(10)
         await mymes.delete()
 
@@ -53,7 +53,9 @@ async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.channel.trigger_typing()
     time.sleep(0.05)
-    await ctx.send(f'`Unloaded` {extension}')
+    mymes = await ctx.send(f'`Unloaded` {extension}')
+    time.sleep(5)
+    await mymes.delete()
     tuidle = 300
 
 
@@ -64,7 +66,7 @@ async def unload_error(ctx, error):
         await mes.delete()
         await ctx.channel.trigger_typing()
         time.sleep(0.05)
-        mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.owner_id}> to use this.")
+        mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.OWNER_ID}> to use this.")
         time.sleep(10)
         await mymes.delete()
 
@@ -84,4 +86,4 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-client.run(myenv.token)
+client.run(myenv.BOT_TOKEN)

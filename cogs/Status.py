@@ -1,10 +1,12 @@
 import discord
 from discord.ext import commands
 import random
+from settings import myenv
+import time
 
 global tuidle
 global mygame
-mygame = discord.Game('^help | discord.gg/T8P4PCS | ^invite')
+mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}invite')
 
 class Status(commands.Cog):
 
@@ -39,12 +41,14 @@ class Status(commands.Cog):
         await self.client.change_presence(status=mystatus, activity=mygame)
         if goodtip == None:
             await ctx.channel.trigger_typing()
-            time.sleep(0.3)
-            await ctx.send(f'`Status` changed to `{sstatus}`')
+            time.sleep(0.05)
+            mymes = await ctx.send(f'`Status` changed to `{sstatus}`')
         else:
             await ctx.channel.trigger_typing()
-            time.sleep(0.3)
-            await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
+            time.sleep(0.05)
+            mymes = await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
+        time.sleep(5)
+        await mymes.delete()
         tuidle = 300
 
 def setup(client):

@@ -4,7 +4,7 @@ import time
 from settings import myenv
 
 global mygame
-mygame = discord.Game(f'{myenv.prefix}help | {myenv.server} | {myenv.prefix}invite')
+mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}invite')
 
 class Admin(commands.Cog):
 
@@ -155,7 +155,7 @@ class Admin(commands.Cog):
             await mes.delete()
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.owner_id}> to use this.")
+            mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
             time.sleep(10)
             await mymes.delete()
             
