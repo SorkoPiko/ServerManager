@@ -132,13 +132,6 @@ class Admin(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
-<<<<<<< HEAD
-        onemessage = ctx.message
-        mymessage = await ctx.send('Logging off...')
-        time.sleep(1)
-        mymessage.delete()
-        onemessage.delete()
-=======
         mes = ctx.message
         #async with ctx.channel.typing():
             #time.sleep(0.1)
@@ -149,7 +142,6 @@ class Admin(commands.Cog):
         await mes.delete()
         audit = f"{ctx.author} ({ctx.author.id}) initiated shutdown in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
         self.auditLog(audit)
->>>>>>> 5644c63faf10476d3351fa3e52017a9128be1add
         await self.client.logout()
 
     @shutdown.error
