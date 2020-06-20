@@ -10,7 +10,7 @@ from settings import myenv
 #token = os.environ.get('SM_TOKEN')
 #print(token)
 
-client = commands.Bot(command_prefix = ['^', '@ServerManager#9610 '])
+client = commands.Bot(command_prefix = commands.when_mentioned_or('^'))
 global tuidle
 global mygame
 mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}')
@@ -33,8 +33,21 @@ async def on_message(message):
     await client.process_commands(message)
 
 @client.event
+async def on_member_join(member):
+    if member.guild.id == 723044268620644403:
+        await member.add_roles(member.guild.get_role(723667695295266886))
+
+@client.event
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=mygame)
+
+@client.command()
+async def emojis(ctx):
+    myemoji = ctx.guild.emojis
+    for emoji in myemoji:
+        theemoji = myemoji[emoji]
+        emojiname = theemoji.name
+        x += 1
 
 @client.command()
 async def token(ctx, member: discord.Member):
