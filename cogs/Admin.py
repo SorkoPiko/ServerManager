@@ -44,8 +44,7 @@ class Admin(commands.Cog):
             await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
         audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
-    
-    
+        
     @clear.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.CheckFailure):
@@ -54,6 +53,41 @@ class Admin(commands.Cog):
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
             mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Manage Messages` permissions to use this.")
+            time.sleep(10)
+            await mymes.delete()
+
+    @commands.command(aliases=['emojis'], description="Make the current channel an emoji list.")
+    @commands.has_permissions(manage_emojis=True)
+    @commands.bot_has_permissions(manage_messages=True, manage_channels=True)
+    async def emojilist(self, ctx, channel_pos: int=1, category: str=None, channel: discord.TextChannel=None):
+        if category == None:
+            category = ctx.category
+        elif channel == None:
+            channel = ctx.channel
+        channel_pos =- 1
+        myemoji = ctx.guild.emojis
+        overwrites = {
+                ctx.guild.default_role: discord.PermissionOverwrite(
+                send_messages=False
+                )
+        }
+        await channel.send("`Editing` the channel...")
+        await channel.edit(name="emoji-list", topic="This is the emoji list, where you can find this server's emojis.", position=channel_pos, nsfw=False, category=category, slowmode_delay=0, type=discord.ChannelType.text, reason=f"{ctx.author} made this channel an emoji list", overwrites=overwrites)
+        await channel.send('Done!\n`Clearing` the channel...')
+        await channel.purge(limit=9999999999999999999999999999)
+        for x in myemoji:
+            #theemoji = myemoji[x]
+            await channel.send(f'{x} -- `{x}`')
+        audit = f"{ctx.author} ({ctx.author.id}) created an emoji list in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
+
+    @emojilist.error
+    async def emojilist_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            mes = ctx.message
+            await mes.delete()
+            await ctx.channel.trigger_typing()
+            time.sleep(0.05)
+            mymes = await ctx.send("`ERROR 403: Forbidden`\nEither:\n`I` need to have `Manage Messages` permissions to use this.\nOr:\n`You` need to have `Manage Emojis` permissions to use this.")
             time.sleep(10)
             await mymes.delete()
 
@@ -101,7 +135,6 @@ class Admin(commands.Cog):
             time.sleep(10)
             await mymes.delete()
 
-
     @commands.command()
     @commands.has_permissions(ban_members=True)
     @commands.bot_has_permissions(ban_members=True)
@@ -132,7 +165,6 @@ class Admin(commands.Cog):
             time.sleep(10)
             await mymes.delete()
 
-
     @commands.command(hidden=True)
     @commands.is_owner()
     async def shutdown(self, ctx):
@@ -159,6 +191,25 @@ class Admin(commands.Cog):
             time.sleep(10)
             await mymes.delete()
             
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def allemoji(self, ctx):
+        mes = ctx.message
+        await mes.delete()
+        allemoji = self.client.emojis
+        for emoji in allemoji:
+            await ctx.send(f"{emoji} -- `{emoji} from {emoji.guild}`")
+
+    @allemoji.error
+    async def allemoji_error(self, ctx, error):
+        if isinstance(error, commands.CheckFailure):
+            mes = ctx.message
+            await mes.delete()
+            await ctx.channel.trigger_typing()
+            time.sleep(0.05)
+            mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
+            time.sleep(10)
+            await mymes.delete()
 
 def setup(client):
     client.add_cog(Admin(client))

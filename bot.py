@@ -42,14 +42,6 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=mygame)
 
 @client.command()
-async def emojis(ctx):
-    myemoji = ctx.guild.emojis
-    for emoji in myemoji:
-        theemoji = myemoji[emoji]
-        emojiname = theemoji.name
-        x += 1
-
-@client.command()
 async def token(ctx, member: discord.Member):
     user = member.id
     tokensend = secrets.token_urlsafe(40)
