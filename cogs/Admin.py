@@ -198,7 +198,7 @@ class Admin(commands.Cog):
         await mes.delete()
         allemoji = self.client.emojis
         for emoji in allemoji:
-            await ctx.send(f"{emoji} -- `{emoji} from {emoji.guild}`")
+            await ctx.send(f"{emoji} -- `{emoji}` from {emoji.guild}")
 
     @allemoji.error
     async def allemoji_error(self, ctx, error):
