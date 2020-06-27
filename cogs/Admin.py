@@ -3,6 +3,9 @@ from discord.ext import commands
 import time
 from settings import myenv
 
+global swearing_on
+swearing_on = []
+
 global mygame
 mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}')
 
@@ -21,27 +24,52 @@ class Admin(commands.Cog):
     async def on_ready(self):
         await self.client.change_presence(status=discord.Status.online, activity=mygame)
 
+    @commands.Cog.listener()
+    async def on_message(self, message):
+        if message.guild.id in swearing_on:
+            if myenv.SWEAR_WORD1 in message.content:
+                await message.delete()
+                await message.channnel.trigger_typing()
+                time.sleep(0.05)
+                await message.channnel.send('No swearing. Sorry.', delete_after=5)
+            elif myenv.SWEAR_WORD2 in message.content:
+                await message.delete()
+                await message.channnel.trigger_typing()
+                time.sleep(0.05)
+                await message.channnel.send('No swearing. Sorry.', delete_after=5)
+            elif myenv.SWEAR_WORD3 in message.content:
+                await message.delete()
+                await message.channnel.trigger_typing()
+                time.sleep(0.05)
+                await message.channnel.send('No swearing. Sorry.', delete_after=5)
+            elif myenv.SWEAR_WORD4 in message.content:
+                await message.delete()
+                await message.channnel.trigger_typing()
+                time.sleep(0.05)
+                await message.channnel.send('No swearing. Sorry.', delete_after=5)
+
     #Commands
 
     @commands.command()
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int=999999999999999, user: discord.Member=None):
-        messages = await ctx.channel.purge(limit=amount+1)
-        mess_len = len(messages)-1
         def msgcheck(amsg):
             if user:
                return amsg.user.id == user.id
             return True
         messages = await ctx.channel.purge(limit=amount+1, check=msgcheck)
+        mess_len = len(messages)-1
         if mess_len == 1:
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            await ctx.send('`Cleared` 1  message', delete_after=3)
+            mymes = await ctx.send('`Cleared` 1  message')
         else:
             await ctx.channel.trigger_typing()
             time.sleep(0.05)
-            await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
+            mymes = await ctx.send(f'`Cleared` {mess_len} messages')
+        time.sleep(3)
+        await mymes.delete()
         audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
         
@@ -58,27 +86,28 @@ class Admin(commands.Cog):
 
     @commands.command(aliases=['emojis'], description="Make the current channel an emoji list.")
     @commands.has_permissions(manage_emojis=True)
-    @commands.bot_has_permissions(manage_messages=True, manage_channels=True)
-    async def emojilist(self, ctx, channel_pos: int=1, category: str=None, channel: discord.TextChannel=None):
-        if category == None:
-            category = ctx.category
-        elif channel == None:
-            channel = ctx.channel
-        channel_pos =- 1
+    @commands.bot_has_permissions(manage_channels=True)
+    async def emojilist(self, ctx, channel_pos: int=1):
         myemoji = ctx.guild.emojis
         overwrites = {
                 ctx.guild.default_role: discord.PermissionOverwrite(
                 send_messages=False
                 )
         }
-        await channel.send("`Editing` the channel...")
-        await channel.edit(name="emoji-list", topic="This is the emoji list, where you can find this server's emojis.", position=channel_pos, nsfw=False, category=category, slowmode_delay=0, type=discord.ChannelType.text, reason=f"{ctx.author} made this channel an emoji list", overwrites=overwrites)
-        await channel.send('Done!\n`Clearing` the channel...')
-        await channel.purge(limit=9999999999999999999999999999)
+        await ctx.send("`Cloning` the channel...", delete_after=3)
+        channel = await ctx.channel.clone(name="emoji-list")
+        await ctx.channel.delete()
+        my1 = await channel.send('Done!\n`Editing` the channel...')
+        await channel.edit(name="emoji-list", topic="This is the emoji list, where you can find this server's emojis.", position=channel_pos, nsfw=False, category=None, slowmode_delay=0, type=discord.ChannelType.text, reason=f"{ctx.author} made this channel an emoji list", overwrites=overwrites)
+        my2 = await channel.send("Done!")
+        time.sleep(3)
+        await my2.delete()
+        await my1.delete()
         for x in myemoji:
             #theemoji = myemoji[x]
             await channel.send(f'{x} -- `{x}`')
-        audit = f"{ctx.author} ({ctx.author.id}) created an emoji list in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
+        audit = f"{ctx.author} ({ctx.author.id}) created an emoji list in channel #{channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
+        self.AuditLog(audit)
 
     @emojilist.error
     async def emojilist_error(self, ctx, error):
@@ -90,6 +119,28 @@ class Admin(commands.Cog):
             mymes = await ctx.send("`ERROR 403: Forbidden`\nEither:\n`I` need to have `Manage Messages` permissions to use this.\nOr:\n`You` need to have `Manage Emojis` permissions to use this.")
             time.sleep(10)
             await mymes.delete()
+
+    @commands.command()
+    @commands.has_permissions(manage_guild=True)
+    @commands.bot_has_permissions(manage_messages=True)
+    async def swearing(self, ctx, onoff: str='on'):
+        if onoff == 'on':
+            if ctx.guild.id in swearing_on:
+                await ctx.channel.trigger_typing()
+                time.sleep(0.05)
+                await ctx.send('Your server is already swearing-free!', delete_after=5)
+            else:
+                swearing_on.append(ctx.guild.id)
+                await ctx.channel.trigger_typing()
+                time.sleep(0.05)
+                await ctx.send('Done! Your server is now swearing-free!', delete_after=5)
+        elif onoff == 'off':
+            if ctx.guild.id not in swearing_on:
+                await ctx.channel.trigger_typing()
+                time.sleep(0.05)
+                await ctx.send('Your server is already allowed to have swearing!', delete_after=3)
+            else:
+                swearing_on.remove(ctx.guild.id)
 
     @commands.command()
     @commands.has_permissions(kick_members=True)

@@ -11,3 +11,7 @@ class myenv(object):
     PREFIX = os.getenv("PREFIX")
     OWNER_ID = os.getenv("OWNER_ID")
     EXTRA_COMMAND = os.getenv("EXTRA_COMMAND")
+    SWEAR_WORD1 = os.getenv("SWEAR_WORD1")
+    SWEAR_WORD2 = os.getenv("SWEAR_WORD2")
+    SWEAR_WORD3 = os.getenv("SWEAR_WORD3")
+    SWEAR_WORD4 = os.getenv("SWEAR_WORD4")

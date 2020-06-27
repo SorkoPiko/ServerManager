@@ -36,6 +36,12 @@ async def on_message(message):
 async def on_member_join(member):
     if member.guild.id == 723044268620644403:
         await member.add_roles(member.guild.get_role(723667695295266886))
+    elif member.guild.id == 709904664472059965:
+        if member.bot:
+            await member.add_roles(member.guild.get_role(709905242837483550))
+    elif member.guild.id == 725613389933445171:
+        if member.bot:
+            await member.add_roles(member.guild.get_role(725938115360981018))
 
 @client.event
 async def on_ready():
@@ -103,6 +109,16 @@ async def invite(ctx):
     await ctx.channel.trigger_typing()
     time.sleep(0.05)
     await ctx.send('Click here to invite me!\nhttps://discord.com/api/oauth2/authorize?client_id=699422804294238248&permissions=8&scope=bot')
+
+def check_btp():
+    def predicate(ctx):
+        return ctx.guild.id == 709904664472059965
+    return commands.check(predicate)
+
+@client.command()
+@check_btp()
+async def addbot(ctx):
+    pass
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
