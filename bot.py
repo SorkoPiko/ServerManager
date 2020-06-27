@@ -115,6 +115,20 @@ def check_btp():
         return ctx.guild.id == 709904664472059965
     return commands.check(predicate)
 
+def check_game_server():
+    def predicate(ctx):
+        return ctx.guild.id == 725613389933445171
+    return commands.check(predicate)
+
+@client.command()
+@check_game_server()
+async def vote(ctx, vote_collecter: discord.Member, time, *, game):
+    votetext = f'{ctx.author} requested the game {game} at time {time}.'
+    await vote_collecter.send(votetext)
+    await ctx.message.delete()
+    await ctx.send(f'Thank you! Your vote has been successfully collected and sent to {vote_collecter.mention}.', delete_after=3)
+
+
 @client.command()
 @check_btp()
 async def addbot(ctx):
