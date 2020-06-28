@@ -122,8 +122,9 @@ def check_game_server():
 
 @client.command()
 @check_game_server()
-async def vote(ctx, vote_collecter: discord.Member, time, *, game):
+async def vote(ctx, time, *, game):
     votetext = f'{ctx.author} requested the game {game} at time {time}.'
+    vote_collector = 609544328737456149
     await vote_collecter.send(votetext)
     await ctx.message.delete()
     await ctx.send(f'Thank you! Your vote has been successfully collected and sent to {vote_collecter.mention}.', delete_after=3)
