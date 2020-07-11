@@ -10,6 +10,11 @@ from settings import myenv
 #token = os.environ.get('SM_TOKEN')
 #print(token)
 
+global verification_tokens
+global bot_info
+bot_info = {}
+verification_tokens = {}
+
 client = commands.Bot(command_prefix = commands.when_mentioned_or('^'))
 global tuidle
 global mygame
@@ -22,7 +27,7 @@ def check_btp():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('$thumb'):
+    if message.content.startswith('^thumb'):
         channel = message.channel
         await channel.send('Send me that 👍 reaction, mate')
 
@@ -43,7 +48,9 @@ async def on_member_join(member):
         await member.add_roles(member.guild.get_role(723667695295266886))
     elif member.guild.id == 709904664472059965:
         if member.bot:
+            #Add Robos roles for bots in the BTP
             await member.add_roles(member.guild.get_role(709905242837483550))
+            await member.add_roles(member.guild.get_role(731303770654375937))
     elif member.guild.id == 725613389933445171:
         if member.bot:
             await member.add_roles(member.guild.get_role(725938115360981018))
@@ -131,10 +138,20 @@ async def vote(ctx, vote_collecter: discord.Member, time, *, game):
     await ctx.message.delete()
     await ctx.send(f'Thank you! Your vote has been successfully collected and sent to {vote_collecter.mention}.', delete_after=3)
 
+@client.command()
+@check_btp()
+async def get_token(ctx, name, client_id, prefix, *, owners: f'{str}#{str} '):
+    tokensend = secrets.token_urlsafe(40)
+    verification_tokens[ctx.author] = tokensend
+    for owner in owners.split(' '):
+        verification_tokens[owner] = tokensend
+    bot_info[f'{ctx.author} {owners} {name} {client_id} {prefix}'] = tokensend
+    message = (f'Here\'s your bot verification token: {tokensend}')
+    await ctx.author.send(message)
 
 @client.command()
 @check_btp()
-async def addbot(ctx):
+async def addbot(ctx, token):
     pass
 
 for filename in os.listdir('./cogs'):
