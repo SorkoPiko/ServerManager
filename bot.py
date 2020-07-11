@@ -111,7 +111,7 @@ async def guide(ctx):
 async def invite(ctx):
     await ctx.channel.trigger_typing()
     time.sleep(0.05)
-    await ctx.send('Click here to invite me!\nhttp://shorturl.at/afpyJ')
+    await ctx.send('Click here to invite me!\nhttps://discord.com/api/oauth2/authorize?client_id=699422804294238248&permissions=8&scope=bot')
 
 def check_btp():
     def predicate(ctx):
