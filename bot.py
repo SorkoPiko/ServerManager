@@ -15,6 +15,11 @@ global tuidle
 global mygame
 mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}')
 
+def check_btp():
+    def predicate(ctx):
+        return ctx.guild.id == 709904664472059965
+    return commands.check(predicate)
+
 @client.event
 async def on_message(message):
     if message.content.startswith('$thumb'):
@@ -48,11 +53,11 @@ async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=mygame)
 
 @client.command()
+@check_btp()
 async def token(ctx, member: discord.Member):
-    user = member.id
     tokensend = secrets.token_urlsafe(40)
     message = (f'Here\'s your bot verification token: {tokensend}')
-    await user.send(message)
+    await member.send(message)
     tuidle = 300
 
 @client.command(hidden=True)
@@ -70,10 +75,8 @@ async def load_error(ctx, error):
         mes = ctx.message
         await mes.delete()
         await ctx.channel.trigger_typing()
-        time.sleep(0.05)
-        mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.OWNER_ID}> to use this.")
-        time.sleep(10)
-        await mymes.delete()
+        await asyncio.sleep(0.05)
+        await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.OWNER_ID}> to use this.", delete_after=10)
 
 @client.command(hidden=True)
 @commands.is_owner()
@@ -82,7 +85,7 @@ async def unload(ctx, extension):
     await ctx.channel.trigger_typing()
     time.sleep(0.05)
     mymes = await ctx.send(f'`Unloaded` {extension}')
-    time.sleep(5)
+    await asyncio.sleep(5)
     await mymes.delete()
     tuidle = 300
 
@@ -93,7 +96,7 @@ async def unload_error(ctx, error):
         mes = ctx.message
         await mes.delete()
         await ctx.channel.trigger_typing()
-        time.sleep(0.05)
+        await asyncio.sleep(0.05)
         mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.OWNER_ID}> to use this.")
         time.sleep(10)
         await mymes.delete()
