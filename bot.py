@@ -140,7 +140,7 @@ async def vote(ctx, vote_collecter: discord.Member, time, *, game):
 
 @client.command()
 @check_btp()
-async def get_token(ctx, name, client_id, prefix, *, owners: f'{str}#{str} '):
+async def get_token(ctx, name, client_id, prefix, *, owners: str):
     tokensend = secrets.token_urlsafe(40)
     verification_tokens[ctx.author] = tokensend
     for owner in owners.split(' '):
