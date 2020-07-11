@@ -41,13 +41,13 @@ class Status(commands.Cog):
         await self.client.change_presence(status=mystatus, activity=mygame)
         if goodtip == None:
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send(f'`Status` changed to `{sstatus}`')
         else:
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send(f'`Status` changed to `{sstatus}`{goodtip}')
-        time.sleep(5)
+        await asyncio.sleep(5)
         await mymes.delete()
         tuidle = 300
         
@@ -57,9 +57,9 @@ class Status(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
 def setup(client):

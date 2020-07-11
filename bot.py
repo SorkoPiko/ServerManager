@@ -65,7 +65,7 @@ async def token(ctx, member: discord.Member):
 async def load(ctx, extension):
     client.load_extension(f'cogs.{extension}')
     await ctx.channel.trigger_typing()
-    time.sleep(0.05)
+    await asyncio.sleep(0.05)
     await ctx.send(f'`Loaded` {extension}')
     tuidle = 300
 
@@ -83,7 +83,7 @@ async def load_error(ctx, error):
 async def unload(ctx, extension):
     client.unload_extension(f'cogs.{extension}')
     await ctx.channel.trigger_typing()
-    time.sleep(0.05)
+    await asyncio.sleep(0.05)
     mymes = await ctx.send(f'`Unloaded` {extension}')
     await asyncio.sleep(5)
     await mymes.delete()
@@ -98,19 +98,19 @@ async def unload_error(ctx, error):
         await ctx.channel.trigger_typing()
         await asyncio.sleep(0.05)
         mymes = await ctx.send(f"`ERROR 403: Forbidden`\nYou need to be <@!{myenv.OWNER_ID}> to use this.")
-        time.sleep(10)
+        await asyncio.sleep(10)
         await mymes.delete()
 
 @client.command()
 async def guide(ctx):
     await ctx.channel.trigger_typing()
-    time.sleep(0.05)
+    await asyncio.sleep(0.05)
     await ctx.send("Here's a link for my guide:\nhttps://docs.google.com/document/d/1IMvLL7D0hfpRCXJRZCFZGGGWDZY5Eu1SeSOEXeishCw/edit?usp=sharing")
 
 @client.command()
 async def invite(ctx):
     await ctx.channel.trigger_typing()
-    time.sleep(0.05)
+    await asyncio.sleep(0.05)
     await ctx.send('Click here to invite me!\nhttps://discord.com/api/oauth2/authorize?client_id=699422804294238248&permissions=8&scope=bot')
 
 def check_btp():

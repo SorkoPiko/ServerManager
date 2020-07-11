@@ -30,22 +30,22 @@ class Admin(commands.Cog):
             if myenv.SWEAR_WORD1 in message.content:
                 await message.delete()
                 await message.channnel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await message.channnel.send('No swearing. Sorry.', delete_after=5)
             elif myenv.SWEAR_WORD2 in message.content:
                 await message.delete()
                 await message.channnel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await message.channnel.send('No swearing. Sorry.', delete_after=5)
             elif myenv.SWEAR_WORD3 in message.content:
                 await message.delete()
                 await message.channnel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await message.channnel.send('No swearing. Sorry.', delete_after=5)
             elif myenv.SWEAR_WORD4 in message.content:
                 await message.delete()
                 await message.channnel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await message.channnel.send('No swearing. Sorry.', delete_after=5)
 
     #Commands
@@ -62,13 +62,13 @@ class Admin(commands.Cog):
         mess_len = len(messages)-1
         if mess_len == 1:
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send('`Cleared` 1  message')
         else:
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send(f'`Cleared` {mess_len} messages')
-        time.sleep(3)
+        await asyncio.sleep(3)
         await mymes.delete()
         audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
@@ -79,9 +79,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Manage Messages` permissions to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
     @commands.command(aliases=['emojis'], description="Make the current channel an emoji list.")
@@ -100,7 +100,7 @@ class Admin(commands.Cog):
         my1 = await channel.send('Done!\n`Editing` the channel...')
         await channel.edit(name="emoji-list", topic="This is the emoji list, where you can find this server's emojis.", position=channel_pos, nsfw=False, category=None, slowmode_delay=0, type=discord.ChannelType.text, reason=f"{ctx.author} made this channel an emoji list", overwrites=overwrites)
         my2 = await channel.send("Done!")
-        time.sleep(3)
+        await asyncio.sleep(3)
         await my2.delete()
         await my1.delete()
         for x in myemoji:
@@ -115,9 +115,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send("`ERROR 403: Forbidden`\nEither:\n`I` need to have `Manage Messages` permissions to use this.\nOr:\n`You` need to have `Manage Emojis` permissions to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
     @commands.command()
@@ -127,17 +127,17 @@ class Admin(commands.Cog):
         if onoff == 'on':
             if ctx.guild.id in swearing_on:
                 await ctx.channel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await ctx.send('Your server is already swearing-free!', delete_after=5)
             else:
                 swearing_on.append(ctx.guild.id)
                 await ctx.channel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await ctx.send('Done! Your server is now swearing-free!', delete_after=5)
         elif onoff == 'off':
             if ctx.guild.id not in swearing_on:
                 await ctx.channel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await ctx.send('Your server is already allowed to have swearing!', delete_after=3)
             else:
                 swearing_on.remove(ctx.guild.id)
@@ -148,7 +148,7 @@ class Admin(commands.Cog):
     async def kick(self, ctx, member : discord.Member, *, reason=None):
         await member.kick(reason=reason)
         await ctx.channel.trigger_typing()
-        time.sleep(0.05)
+        await asyncio.sleep(0.05)
         await ctx.send(f'`Kicked` {member.mention}')
         audit = f'{ctx.author} ({ctx.author.id}) kicked {member} in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
@@ -159,9 +159,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send("`ERROR 403: Forbidden`\n`I/`You` need to have `Kick Members` permissions to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
     @commands.command()
@@ -170,7 +170,7 @@ class Admin(commands.Cog):
     async def ban(self, ctx, member : discord.Member, *, reason=None):
         await member.ban(reason=reason)
         await ctx.channel.trigger_typing()
-        time.sleep(0.05)
+        await asyncio.sleep(0.05)
         await ctx.send(f'`Banned` {member.mention} with the reason `{reason}`.')
         audit = f'{ctx.author} ({ctx.author.id}) banned {member} in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
@@ -181,9 +181,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Ban Members` permissions to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
     @commands.command()
@@ -199,7 +199,7 @@ class Admin(commands.Cog):
             if (user.name, user.discriminator) == (member_name, member_discriminator):
                 await ctx.guild.unban(user)
                 await ctx.channel.trigger_typing()
-                time.sleep(0.05)
+                await asyncio.sleep(0.05)
                 await ctx.send(f'`Unbanned` {user.mention}')
                 audit = f'{ctx.author} ({ctx.author.id}) unbanned {member} in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
                 self.auditLog(audit)
@@ -211,9 +211,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send("`ERROR 403: Forbidden`\n`I`/`You` need to have `Ban Members` permissions to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
     @commands.command(hidden=True)
@@ -221,10 +221,10 @@ class Admin(commands.Cog):
     async def shutdown(self, ctx):
         mes = ctx.message
         #async with ctx.channel.typing():
-            #time.sleep(0.1)
+            #await asyncio.sleep(0.1)
             #mymes = await ctx.send('Logging off...')
         await ctx.channel.trigger_typing()
-        time.sleep(0.05)
+        await asyncio.sleep(0.05)
         await ctx.send('Logging off...', delete_after=1)
         await mes.delete()
         audit = f"{ctx.author} ({ctx.author.id}) initiated shutdown in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
@@ -237,9 +237,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
             
     @commands.command(hidden=True)
@@ -257,9 +257,9 @@ class Admin(commands.Cog):
             mes = ctx.message
             await mes.delete()
             await ctx.channel.trigger_typing()
-            time.sleep(0.05)
+            await asyncio.sleep(0.05)
             mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
-            time.sleep(10)
+            await asyncio.sleep(10)
             await mymes.delete()
 
 def setup(client):
