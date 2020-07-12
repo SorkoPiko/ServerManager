@@ -1,6 +1,6 @@
 import discord
 from discord.ext import commands
-import time
+import asyncio
 from settings import myenv
 
 global swearing_on
@@ -107,7 +107,7 @@ class Admin(commands.Cog):
             #theemoji = myemoji[x]
             await channel.send(f'{x} -- `{x}`')
         audit = f"{ctx.author} ({ctx.author.id}) created an emoji list in channel #{channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
-        self.AuditLog(audit)
+        self.auditLog(audit)
 
     @emojilist.error
     async def emojilist_error(self, ctx, error):
@@ -128,17 +128,17 @@ class Admin(commands.Cog):
             if ctx.guild.id in swearing_on:
                 await ctx.channel.trigger_typing()
                 await asyncio.sleep(0.05)
-                await ctx.send('Your server is already swearing-free!', delete_after=5)
+                await ctx.send('Your server is already has swearing disabled!', delete_after=5)
             else:
                 swearing_on.append(ctx.guild.id)
                 await ctx.channel.trigger_typing()
                 await asyncio.sleep(0.05)
-                await ctx.send('Done! Your server is now swearing-free!', delete_after=5)
+                await ctx.send('Done! Your server no longer supports swearing!', delete_after=5)
         elif onoff == 'off':
             if ctx.guild.id not in swearing_on:
                 await ctx.channel.trigger_typing()
                 await asyncio.sleep(0.05)
-                await ctx.send('Your server is already allowed to have swearing!', delete_after=3)
+                await ctx.send('Your server already allows swearing!', delete_after=3)
             else:
                 swearing_on.remove(ctx.guild.id)
 
@@ -163,6 +163,7 @@ class Admin(commands.Cog):
             mymes = await ctx.send("`ERROR 403: Forbidden`\n`I/`You` need to have `Kick Members` permissions to use this.")
             await asyncio.sleep(10)
             await mymes.delete()
+            
 
     @commands.command()
     @commands.has_permissions(ban_members=True)

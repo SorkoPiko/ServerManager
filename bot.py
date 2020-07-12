@@ -2,7 +2,7 @@
 
 import discord
 from discord.ext import commands, tasks
-import time
+import asyncio
 import secrets
 import os
 from settings import myenv
@@ -27,7 +27,11 @@ def check_btp():
 
 @client.event
 async def on_message(message):
-    if message.content.startswith('^thumb'):
+    if message.guild.id == 709904664472059965:
+        if message.channel.id == 730530957160874121:
+            if ' my bot invite link is https://discord.com/oauth2/authorize' in message.content:
+                await message.channel.send(f'Seriously, {message.author.mention}! You don\'t have to make your message EXACTLY like shown!')
+    elif message.content.startswith('^thumb'):
         channel = message.channel
         await channel.send('Send me that 👍 reaction, mate')
 
@@ -59,13 +63,12 @@ async def on_member_join(member):
 async def on_ready():
     await client.change_presence(status=discord.Status.online, activity=mygame)
 
-@client.command()
-@check_btp()
-async def token(ctx, member: discord.Member):
-    tokensend = secrets.token_urlsafe(40)
-    message = (f'Here\'s your bot verification token: {tokensend}')
-    await member.send(message)
-    tuidle = 300
+#@client.command()
+#@check_btp()
+#async def token(ctx, member: discord.Member):
+#    tokensend = secrets.token_urlsafe(40)
+#    message = (f'Here\'s your bot verification token: {tokensend}')
+#    await member.send(message)
 
 @client.command(hidden=True)
 @commands.is_owner()
@@ -74,7 +77,6 @@ async def load(ctx, extension):
     await ctx.channel.trigger_typing()
     await asyncio.sleep(0.05)
     await ctx.send(f'`Loaded` {extension}')
-    tuidle = 300
 
 @load.error
 async def load_error(ctx, error):
@@ -94,8 +96,6 @@ async def unload(ctx, extension):
     mymes = await ctx.send(f'`Unloaded` {extension}')
     await asyncio.sleep(5)
     await mymes.delete()
-    tuidle = 300
-
 
 @unload.error
 async def unload_error(ctx, error):
@@ -120,11 +120,6 @@ async def invite(ctx):
     await asyncio.sleep(0.05)
     await ctx.send('Click here to invite me!\nhttps://discord.com/api/oauth2/authorize?client_id=699422804294238248&permissions=8&scope=bot')
 
-def check_btp():
-    def predicate(ctx):
-        return ctx.guild.id == 709904664472059965
-    return commands.check(predicate)
-
 def check_game_server():
     def predicate(ctx):
         return ctx.guild.id == 725613389933445171
@@ -140,14 +135,18 @@ async def vote(ctx, vote_collecter: discord.Member, time, *, game):
 
 @client.command()
 @check_btp()
-async def get_token(ctx, name, client_id, prefix, *, owners: str):
+async def get_token(ctx, name, client_id, prefix, *, owners: discord.Member):
     tokensend = secrets.token_urlsafe(40)
-    verification_tokens[ctx.author] = tokensend
+    #Regenerate token if it already exists, very low chance though
+    if tokensend in verification_tokens, bot_info:
+        tokensend = secrets.token_urlsafe(40)
+    verification_tokens[tokensend] = ctx.author
     for owner in owners.split(' '):
-        verification_tokens[owner] = tokensend
+        verification_tokens[tokensend] = owner
     bot_info[f'{ctx.author} {owners} {name} {client_id} {prefix}'] = tokensend
-    message = (f'Here\'s your bot verification token: {tokensend}')
-    await ctx.author.send(message)
+    message = (f'Here\'s your bot verification token: {tokensend}/nEnter it in <#!730530957160874121>')
+    for owner in owners.split(' '):
+        await owner.send(message)
 
 @client.command()
 @check_btp()
