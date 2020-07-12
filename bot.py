@@ -144,7 +144,7 @@ async def get_token(ctx, name, client_id, prefix, *, owners: discord.Member):
     verification_tokens[tokensend] = ctx.author
     for owner in owners.split(' '):
         verification_tokens[tokensend] = owner
-    bot_info[f'{ctx.author} {owners} {name} {client_id} {prefix}'] = tokensend
+    bot_info[tokensend] = f'{owners} {ctx.author} {name} {client_id} {prefix}'
     message = (f'Here\'s your bot verification token: {tokensend}/nEnter it in <#!730530957160874121>')
     for owner in owners.split(' '):
         await owner.send(message)
@@ -152,7 +152,8 @@ async def get_token(ctx, name, client_id, prefix, *, owners: discord.Member):
 @client.command()
 @check_btp()
 async def addbot(ctx, token):
-    pass
+    if verification_tokens[token] == ctx.author:
+        bot_info.get(token)
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
