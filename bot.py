@@ -138,7 +138,7 @@ async def vote(ctx, vote_collecter: discord.Member, time, *, game):
 async def get_token(ctx, name, client_id, prefix, *, owners: discord.Member):
     tokensend = secrets.token_urlsafe(40)
     #Regenerate token if it already exists, very low chance though
-    if tokensend in verification_tokens, bot_info:
+    if tokensend in verification_tokens or bot_info:
         tokensend = secrets.token_urlsafe(40)
     verification_tokens[tokensend] = ctx.author
     for owner in owners.split(' '):
