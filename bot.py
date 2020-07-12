@@ -27,9 +27,10 @@ def check_btp():
 
 @client.event
 async def on_message(message):
-    if message.guild.id == 709904664472059965:
-        if message.channel.id == 730530957160874121:
+    if message.channel.id == 730530957160874121:
             if ' my bot invite link is https://discord.com/oauth2/authorize' in message.content:
+                await message.channel.send(f'Seriously, {message.author.mention}! You don\'t have to make your message EXACTLY like shown!')
+            elif ' my bot invite link is https://discordapp.com/oauth2/authorize' in message.content:
                 await message.channel.send(f'Seriously, {message.author.mention}! You don\'t have to make your message EXACTLY like shown!')
     elif message.content.startswith('^thumb'):
         channel = message.channel
