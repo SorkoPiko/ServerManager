@@ -26,27 +26,30 @@ class Admin(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
-        if message.guild.id in swearing_on:
-            if myenv.SWEAR_WORD1 in message.content:
-                await message.delete()
-                await message.channnel.trigger_typing()
-                await asyncio.sleep(0.05)
-                await message.channnel.send('No swearing. Sorry.', delete_after=5)
-            elif myenv.SWEAR_WORD2 in message.content:
-                await message.delete()
-                await message.channnel.trigger_typing()
-                await asyncio.sleep(0.05)
-                await message.channnel.send('No swearing. Sorry.', delete_after=5)
-            elif myenv.SWEAR_WORD3 in message.content:
-                await message.delete()
-                await message.channnel.trigger_typing()
-                await asyncio.sleep(0.05)
-                await message.channnel.send('No swearing. Sorry.', delete_after=5)
-            elif myenv.SWEAR_WORD4 in message.content:
-                await message.delete()
-                await message.channnel.trigger_typing()
-                await asyncio.sleep(0.05)
-                await message.channnel.send('No swearing. Sorry.', delete_after=5)
+        try:
+            if message.guild.id in swearing_on:
+                if myenv.SWEAR_WORD1 in message.content:
+                    await message.delete()
+                    await message.channnel.trigger_typing()
+                    await asyncio.sleep(0.05)
+                    await message.channnel.send('No swearing. Sorry.', delete_after=5)
+                elif myenv.SWEAR_WORD2 in message.content:
+                    await message.delete()
+                    await message.channnel.trigger_typing()
+                    await asyncio.sleep(0.05)
+                    await message.channnel.send('No swearing. Sorry.', delete_after=5)
+                elif myenv.SWEAR_WORD3 in message.content:
+                    await message.delete()
+                    await message.channnel.trigger_typing()
+                    await asyncio.sleep(0.05)
+                    await message.channnel.send('No swearing. Sorry.', delete_after=5)
+                elif myenv.SWEAR_WORD4 in message.content:
+                    await message.delete()
+                    await message.channnel.trigger_typing()
+                    await asyncio.sleep(0.05)
+                    await message.channnel.send('No swearing. Sorry.', delete_after=5)
+        except AttributeError:
+            pass
 
     #Commands
 
