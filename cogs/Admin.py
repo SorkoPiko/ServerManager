@@ -57,22 +57,29 @@ class Admin(commands.Cog):
     @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def clear(self, ctx, amount: int=999999999999999, user: discord.Member=None):
-        def msgcheck(amsg):
-            if user:
-               return amsg.user.id == user.id
-            return True
-        messages = await ctx.channel.purge(limit=amount+1, check=msgcheck)
+        messages = await ctx.channel.history(limit=amount+1).flatten()
         mess_len = len(messages)-1
         if mess_len == 1:
+            await ctx.channel.purge(limit=1)
             await ctx.channel.trigger_typing()
             await asyncio.sleep(0.05)
-            mymes = await ctx.send('`Cleared` 1  message')
+            mymes = await ctx.send('`Cleared` 1  message', delete_after=3)
+        elif mess_len > 100:
+            await ctx.channel.trigger_typing()
+            await asyncio.sleep(0.05)
+            await ctx.send(f'You are clearing `100+ messages ({mess_len}).` Do you wish to proceed? (`yes`). You have `60 seconds` to respond.', delete_after=60)
+            def check(m):
+                return m.channel == ctx.channel and m.content == 'yes'
+            try:
+                msg = await client.wait_for('message', timeout=60.0, check=check)
+                await ctx.channel.purge(limit=mess_len+1)
+            except asyncio.TimeoutError:
+                await ctx.send('`Timed Out.`', delete_after=3)
         else:
+            await ctx.channel.purge(limit=mess_len+2)
             await ctx.channel.trigger_typing()
             await asyncio.sleep(0.05)
-            mymes = await ctx.send(f'`Cleared` {mess_len} messages')
-        await asyncio.sleep(3)
-        await mymes.delete()
+            mymes = await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
         audit = f'{ctx.author} ({ctx.author.id}) cleared {mess_len} message(s) in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC.'
         self.auditLog(audit)
         

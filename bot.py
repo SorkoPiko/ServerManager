@@ -27,7 +27,15 @@ def check_btp():
 
 @client.event
 async def on_message(message):
-    if message.channel.id == 730530957160874121:
+    if message.channel.id == 732445949820928021:
+        log = client.get_channel(730575039677857842)
+        await log.send(f'{message.content} `sent in `{message.channel.mention}` by `{message.author.mention}. Message ID: {message.id}')
+        for embed in message.embeds:
+            await log.send(f'Message ID: {message.id}. Embed: ', embed=embed)
+        for attachment in message.attachments:
+            file = await attachment.to_file()
+            await log.send(f'Message ID: {message.id}. Attachment: ', file=file)
+    elif message.channel.id == 730530957160874121:
             if ' my bot invite link is https://discord.com/oauth2/authorize' in message.content:
                 await message.channel.send(f'Seriously, {message.author.mention}! You don\'t have to make your message EXACTLY like shown!')
             elif ' my bot invite link is https://discordapp.com/oauth2/authorize' in message.content:
@@ -155,6 +163,8 @@ async def addbot(ctx, token):
     if_verified = verification_tokens.get[ctx.author]
     if if_verified == token:
         bot_info.get(token)
+
+client.load_extension('jishaku')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
