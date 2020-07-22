@@ -67,7 +67,7 @@ class Admin(commands.Cog):
         elif mess_len > 100:
             await ctx.channel.trigger_typing()
             await asyncio.sleep(0.05)
-            await ctx.send(f'You are clearing `100+ messages ({mess_len}).` Do you wish to proceed? (React with `:thumbsup:`). You have `60 seconds` to respond.', delete_after=60)
+            await ctx.send(f'You are clearing `100+ messages ({mess_len}).` Do you wish to proceed? (`yes`). You have `60 seconds` to respond.', delete_after=60)
             def check(msg):
                 return msg.author == ctx.author and msg.channel == ctx.channel and msg.content == 'yes'
             try:
@@ -75,7 +75,10 @@ class Admin(commands.Cog):
             except asyncio.TimeoutError:
                 await ctx.send('`Timed Out.`', delete_after=3)
             else:
-                await ctx.channel.purge(limit=mess_len+1)
+                await ctx.channel.purge(limit=mess_len+3)
+                await ctx.channel.trigger_typing()
+                await asyncio.sleep(0.05)
+                await ctx.send(f'`Cleared` {mess_len} messages', delete_after=3)
         else:
             await ctx.channel.purge(limit=mess_len+2)
             await ctx.channel.trigger_typing()
