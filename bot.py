@@ -27,8 +27,11 @@ def check_btp():
 
 @client.event
 async def on_message(message):
-    if message.channel.id == 732445949820928021:
-        log = client.get_channel(730575039677857842)
+    if message.channel.id == 732445949820928021 or message.channel.id == 735768096152879114:
+        if message.channel.id == 732445949820928021:
+            log = client.get_channel(730575039677857842)
+        elif message.channel.id == 735768096152879114:
+            log = client.get_channel(710293107773538326)
         await log.send(f'{message.content} `sent in `{message.channel.mention}` by `{message.author.mention}. Message ID: {message.id}')
         for embed in message.embeds:
             await log.send(f'Message ID: {message.id}. Embed: ', embed=embed)
@@ -168,6 +171,6 @@ client.load_extension('jishaku')
 
 for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
-		client.load_extension(f'cogs.{filename[:-3]}')
+        client.load_extension(f'cogs.{filename[:-3]}')
 
 client.run(myenv.BOT_TOKEN)
