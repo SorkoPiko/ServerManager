@@ -3,5 +3,6 @@ cogs/AuditLog.txt
 cogs/__pycache__/
 .DS_Store
 __pycache__/
-__pycache__/
-cogs/__pycache__/
+Install\ Certificates.py
+check.test.js
+.vscode/

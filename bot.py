@@ -15,7 +15,7 @@ global bot_info
 bot_info = {}
 verification_tokens = {}
 
-client = commands.Bot(command_prefix = commands.when_mentioned_or('^'))
+client = commands.Bot(command_prefix = commands.when_mentioned_or(myenv.PREFIX))
 global tuidle
 global mygame
 mygame = discord.Game(f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}')
@@ -27,8 +27,11 @@ def check_btp():
 
 @client.event
 async def on_message(message):
-    if message.channel.id == 732445949820928021:
-        log = client.get_channel(730575039677857842)
+    if message.channel.id == 732445949820928021 or message.channel.id == 735768096152879114:
+        if message.channel.id == 732445949820928021:
+            log = client.get_channel(730575039677857842)
+        elif message.channel.id == 735768096152879114:
+            log = client.get_channel(710293107773538326)
         await log.send(f'{message.content} `sent in `{message.channel.mention}` by `{message.author.mention}. Message ID: {message.id}')
         for embed in message.embeds:
             await log.send(f'Message ID: {message.id}. Embed: ', embed=embed)
@@ -42,7 +45,7 @@ async def on_message(message):
                 await message.channel.send(f'Seriously, {message.author.mention}! You don\'t have to make your message EXACTLY like shown!')
     elif message.content.startswith('^thumb'):
         channel = message.channel
-        await channel.send('Send me that 👍 reaction, mate')
+        await channel.send('`React` with 👍')
 
         def check(reaction, user):
             return user == message.author and str(reaction.emoji) == '👍'
@@ -146,9 +149,9 @@ async def get_token(ctx, name, client_id, prefix, *, owners: discord.Member):
     #Regenerate token if it already exists, very low chance though
     if tokensend in verification_tokens or bot_info:
         tokensend = secrets.token_urlsafe(40)
-    verification_tokens[tokensend] = ctx.author
+    verification_tokens[ctx.author] = tokensend
     for owner in owners.split(' '):
-        verification_tokens[tokensend] = owner
+        verification_tokens[owner] = tokensend
     bot_info[tokensend] = f'{owners} {ctx.author} {name} {client_id} {prefix}'
     message = (f'Here\'s your bot verification token: {tokensend}/nEnter it in <#!730530957160874121>')
     for owner in owners.split(' '):
@@ -157,7 +160,8 @@ async def get_token(ctx, name, client_id, prefix, *, owners: discord.Member):
 @client.command()
 @check_btp()
 async def addbot(ctx, token):
-    if verification_tokens[token] == ctx.author:
+    if_verified = verification_tokens.get[ctx.author]
+    if if_verified == token:
         bot_info.get(token)
 
 client.load_extension('jishaku')
