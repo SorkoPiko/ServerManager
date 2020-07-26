@@ -64,13 +64,10 @@ async def on_member_join(member):
             #Add Robos roles for bots in the BTP
             await member.add_roles(member.guild.get_role(709905242837483550))
             await member.add_roles(member.guild.get_role(731303770654375937))
+            await member.add_roles(member.guild.get_role(735006808326013020))
     elif member.guild.id == 725613389933445171:
         if member.bot:
             await member.add_roles(member.guild.get_role(725938115360981018))
-
-@client.event
-async def on_ready():
-    await client.change_presence(status=discord.Status.online, activity=mygame)
 
 #@client.command()
 #@check_btp()
@@ -169,4 +166,23 @@ for filename in os.listdir('./cogs'):
     if filename.endswith('.py'):
         client.load_extension(f'cogs.{filename[:-3]}')
 
-client.run(myenv.BOT_TOKEN)
+import aiohttp
+
+def runclient():
+    try:
+        client.run(myenv.BOT_TOKEN)
+    except aiohttp.client_exceptions.ClientConnectorError:
+        print('Bot failed connecting.')
+        #retry = input('Retry connecting? yes/no ')
+        #if retry == 'yes':
+            #print('Retrying...')
+            #try:
+                #client.run(myenv.BOT_TOKEN)
+            #except aiohttp.client_exceptions.ClientConnectorError:
+                #print('Bot failed connecting. Terminating...')
+        #else:
+           #print('Terminating...')
+    #except RuntimeError:
+        #print('RuntimeError. Terminating...')
+
+runclient()

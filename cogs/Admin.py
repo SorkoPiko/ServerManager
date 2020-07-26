@@ -1,7 +1,16 @@
 import discord
-from discord.ext import commands
+from discord.ext import commands, tasks
 import asyncio
 from settings import myenv
+import os
+from itertools import cycle
+import cogs.utils.time as utiltime
+import datetime
+
+start_time = datetime.datetime.utcnow()
+
+reload = '<:greenTick:596576670815879169>'
+null = '<:redTick:596576672149667840>'
 
 global swearing_on
 swearing_on = []
@@ -13,16 +22,16 @@ class Admin(commands.Cog):
 
     def __init__(self, client):
         self.client = client
+        self.status_count = 0
+        self.status = cycle([f' with {len(self.client.users)} users', f' on {len(self.client.guilds)} servers', f'{myenv.PREFIX}help | {myenv.SUPPORT_SERVER} | {myenv.PREFIX}{myenv.EXTRA_COMMAND}'])
+        self.presence.start()
+
         
     def auditLog(self, log):
         with open("cogs/AuditLog.txt", 'a') as file:
             file.write('\n' + log)
 
     #Events
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        await self.client.change_presence(status=discord.Status.online, activity=mygame)
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -242,7 +251,7 @@ class Admin(commands.Cog):
         await asyncio.sleep(0.05)
         await ctx.send('Logging off...', delete_after=1)
         await mes.delete()
-        audit = f"{ctx.author} ({ctx.author.id}) initiated shutdown in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
+        audit = f"{ctx.author} ({ctx.author.id}) in)itiated shutdown in channel #{ctx.channel} in guild {ctx.guild} at time {ctx.message.created_at} UTC."
         self.auditLog(audit)
         await self.client.logout()
 
@@ -276,6 +285,63 @@ class Admin(commands.Cog):
             mymes = await ctx.send(f"`ERROR 403: Forbidden`\n`You` need to be <@!{myenv.OWNER_ID}> to use this.")
             await asyncio.sleep(10)
             await mymes.delete()
+
+    @commands.command(help="Reloads Cogs", aliases=['rl'])
+    @commands.is_owner()
+    async def reload(self, ctx, *extension):
+        if not extension:
+            for filename in os.listdir('cogs'):
+                if filename.endswith('.py'):
+                    self.client.reload_extension(f'cogs.{filename[:-3]}')
+            
+            embed = discord.Embed(
+                description="\n".join([f"{reload} `cogs.{f[:-3]}`" for f in os.listdir("cogs") if f.endswith(".py")]),
+                colour=discord.Colour.blue())
+            await ctx.send(embed=embed)
+            await ctx.message.add_reaction(emoji=":greenTick:596576670815879169")
+            s
+        elif len(extension) == 1 and extension[0] == "~":
+            cogs = [c[:-3] for c in os.listdir('cogs') if c.endswith(".py")]
+            for f in cogs:
+                self.client.reload_extension(f'cogs.{f}')
+            a = []
+            for x in cogs:
+                a.append(f"{reload} `cogs.{x}`")
+            await ctx.message.add_reaction(emoji=":greenTick:596576670815879169")
+            await ctx.send(embed=discord.Embed(description="\n".join(a), colour=discord.Colour.blue()))
+
+        else:
+            cogs = [c[:-3] for c in os.listdir('cogs') if c.endswith(".py")]
+            for i in extension:
+                if i not in cogs:
+                    return await ctx.send(f"**{i}** is not a valid cog!")
+            
+            for f in extension:
+                self.client.reload_extension(f'cogs.{f}')
+            a = []
+            for x in cogs:
+                if x in extension:
+                    a.append(f"{reload} `cogs.{x}`")
+                else:
+                    a.append(f"{null} `cogs.{x}`")
+            
+            await ctx.message.add_reaction(emoji=":greenTick:596576670815879169")
+            await ctx.send(embed=discord.Embed(description="\n".join(a), colour=discord.Colour.blue()))
+
+    @commands.command()
+    async def uptime(self, ctx):
+        """Tells you how long the bot has been up for."""
+        delta_uptime = datetime.datetime.utcnow() - start_time
+        hours, remainder = divmod(int(delta_uptime.total_seconds()), 3600)
+        minutes, seconds = divmod(remainder, 60)
+        days, hours = divmod(hours, 24)
+        uptime = f"**{days}** days, **{hours}** hours, **{minutes}** minutes, **{seconds}** seconds"
+        await ctx.send(f'Uptime: {uptime}')
+    #Loops
+
+    @tasks.loop(seconds=45.0)
+    async def presence(self):
+        await self.client.change_presence(status=discord.Status.online, activity=discord.Game(next(self.status)))
 
 def setup(client):
     client.add_cog(Admin(client))
