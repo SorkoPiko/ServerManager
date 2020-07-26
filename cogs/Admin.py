@@ -301,7 +301,6 @@ class Admin(commands.Cog):
                 colour=discord.Colour.blue())
             await ctx.send(embed=embed)
             await ctx.message.add_reaction(emoji=":greenTick:596576670815879169")
-            s
         elif len(extension) == 1 and extension[0] == "~":
             cogs = [c[:-3] for c in os.listdir('cogs') if c.endswith(".py")]
             for f in cogs:

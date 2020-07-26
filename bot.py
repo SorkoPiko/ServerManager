@@ -65,9 +65,11 @@ async def on_member_join(member):
     elif member.guild.id == 709904664472059965:
         if member.bot:
             #Add Robos roles for bots in the BTP
-            await member.add_roles(member.guild.get_role(709905242837483550))
-            await member.add_roles(member.guild.get_role(731303770654375937))
-            await member.add_roles(member.guild.get_role(735006808326013020))
+            roles = []
+            roles.append(member.guild.get_role(709905242837483550))
+            roles.append(member.guild.get_role(731303770654375937))
+            roles.append(member.guild.get_role(735006808326013020))
+            await member.edit(nick=f'{member.name} | !help', roles=roles)
     elif member.guild.id == 725613389933445171:
         if member.bot:
             await member.add_roles(member.guild.get_role(725938115360981018))
