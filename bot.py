@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
-import discord
-from discord.ext import commands, tasks
-import asyncio
-import secrets
-import os
-from settings import myenv
-
+try:
+    import discord
+    from discord.ext import commands, tasks
+    import asyncio
+    import secrets
+    import os
+    from settings import myenv
+except Exception:
+    import subprocess
+    subprocess.run(["python3", "-m", "pip", "install", "-r" "requirements.txt"])
 #token = os.environ.get('SM_TOKEN')
 #print(token)
 
