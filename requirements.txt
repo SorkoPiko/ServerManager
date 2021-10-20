@@ -1,4 +1,5 @@
 discord
-dotenv
+python-dotenv
 Jishaku
 setuptools
+pathlib
